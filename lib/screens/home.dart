@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:foodie/constants.dart';
 import 'package:foodie/demodata.dart';
 
+import '../components/image_carousel.dart';
+import '../components/restaurant_card.dart';
+import '../components/setction_title.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -11,8 +15,8 @@ class HomeScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
+            floating: true,
+            backgroundColor: Colors.white,
             title: Column(
               children: [
                 Text("DELIVERY TO",
@@ -36,70 +40,80 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SliverToBoxAdapter(
-            child: ImageCarousel(),
+          const SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: defaultPadding / 1.7),
+            sliver: SliverToBoxAdapter(
+              child: ImageCarousel(),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(defaultPadding),
+            sliver: SectionTitle(title: "Featured Partners", press: () {}),
+          ),
+          SliverToBoxAdapter(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: defaultPadding / 3, right: 12),
+                child: Row(
+                  children: List.generate(
+                    demoMediumCardData.length,
+                    (index) => Padding(
+                      padding:
+                          const EdgeInsets.only(left: defaultPadding / 1.5),
+                      child: RestaurentInfoCard(
+                        name: demoMediumCardData[index]['name'],
+                        location: demoMediumCardData[index]['location'],
+                        rating: demoMediumCardData[index]['rating'],
+                        time: demoMediumCardData[index]['delivertTime'],
+                        image: demoMediumCardData[index]['image'],
+                        press: () {},
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(defaultPadding),
+            sliver: SectionTitle(title: "Best Picks", press: () {}),
+          ),
+          SliverToBoxAdapter(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: defaultPadding / 3, right: 12),
+                child: Row(
+                  children: List.generate(
+                    demoMediumCardData.length,
+                    (index) => Padding(
+                      padding:
+                          const EdgeInsets.only(left: defaultPadding / 1.5),
+                      child: RestaurentInfoCard(
+                        name: demoMediumCardData[index]['name'],
+                        location: demoMediumCardData[index]['location'],
+                        rating: demoMediumCardData[index]['rating'],
+                        time: demoMediumCardData[index]['delivertTime'],
+                        image: demoMediumCardData[index]['image'],
+                        press: () {},
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(defaultPadding),
+            sliver: SliverToBoxAdapter(
+              child: Image.asset('assets/images/Banner.png'),
+            ),
           )
         ],
       ),
-    );
-  }
-}
-
-class ImageCarousel extends StatefulWidget {
-  const ImageCarousel({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<ImageCarousel> createState() => _ImageCarouselState();
-}
-
-class _ImageCarouselState extends State<ImageCarousel> {
-  int currentIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.81,
-      child: Stack(children: [
-        PageView.builder(
-          itemCount: demoBigImages.length,
-          onPageChanged: (value) {
-            setState(() {
-              currentIndex = value;
-            });
-          },
-          itemBuilder: (context, index) => Image.asset(demoBigImages[index]),
-        ),
-        Positioned(
-            bottom: defaultPadding,
-            right: defaultPadding,
-            child: Row(
-                children: List.generate(
-                    demoBigImages.length,
-                    (index) => Padding(
-                        padding:
-                            const EdgeInsets.only(left: defaultPadding / 4),
-                        child: Indicator(isActive: index == currentIndex)))))
-      ]),
-    );
-  }
-}
-
-class Indicator extends StatelessWidget {
-  final bool isActive;
-  const Indicator({
-    Key? key,
-    required this.isActive,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 4,
-      width: 8,
-      decoration: BoxDecoration(
-          color: isActive ? Colors.white : Colors.white30,
-          borderRadius: const BorderRadius.all(Radius.circular(12))),
     );
   }
 }
